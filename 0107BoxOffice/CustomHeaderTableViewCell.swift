@@ -1,21 +1,18 @@
 //
-//  CustomTableViewCell.swift
+//  CustomHeaderTableViewCell.swift
 //  0107BoxOffice
 //
-//  Created by jh on 2021/01/18.
+//  Created by jh on 2021/02/15.
 //
 
 import UIKit
 
-class CustomTableViewCell: UITableViewCell {
+class CustomHeaderTableViewCell: UITableViewCell {
 
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var detailLabel: UILabel!
-    @IBOutlet var dateLabel: UILabel!
-    @IBOutlet var titleImage: UIImageView!
-    //@IBOutlet var ageImage: UIImageView!
-    
-    
+    @IBOutlet weak var titleText: UILabel!
+    @IBOutlet weak var outletWhiteButton: UIButton!
+    @IBAction func whiteButton(_ sender: Any) {
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

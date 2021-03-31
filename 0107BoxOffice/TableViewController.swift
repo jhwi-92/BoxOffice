@@ -12,48 +12,22 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var tableView: UITableView!
     let cellIdentifier: String = "movieCell"
     var movieInfos: [MovieInfo] = []
+    var orderType: String = "0"
     
 //    @IBOutlet weak var stackView: UIStackView!
     
     //뷰가 로드되었을 때
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.title = "예매율"
         // Do any additional setup after loading the view.
     }
     //뷰가 나타났을 떄.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        let spacer = UIView()
-//                spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//                stackView.addArrangedSubview(spacer)
-        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type=1") else {return}
-        
-        let session: URLSession = URLSession(configuration: .default)
-        let dataTask: URLSessionDataTask = session.dataTask(with: url) {(data: Data?, response: URLResponse?, error: Error?) in
-            
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            guard let data = data else {return}
-            
-            do {
-                let apiResponse: APIResponse = try JSONDecoder().decode(APIResponse.self, from: data)
-                self.movieInfos = apiResponse.movies
-                //print("====================")
-                //print(self.movieInfos)
-                OperationQueue.main.addOperation {
-                    self.tableView.reloadData()
-                }
-                
-            } catch(let err) {
-                print(err.localizedDescription)
-            }
-            
-        }
-        dataTask.resume()
+
+        //api호출
+        dataConnect()
     }
     
     
@@ -115,5 +89,88 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func setSort(_ sender: Any) {
+        
+        showAlert()
+    }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "정렬방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: .actionSheet)
+        
+        let ticketing = UIAlertAction(title: "예매율", style: .default) { (UIAlertAction) in
+            self.orderTypeCheck(orderType: "0")
+        }
+        let curation = UIAlertAction(title: "큐레이션", style: .default) { (UIAlertAction) in
+            self.orderTypeCheck(orderType: "1")
+        }
+        let openingDate = UIAlertAction(title: "개봉일", style: .default) { (UIAlertAction) in
+            self.orderTypeCheck(orderType: "2")
+        }
+        
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(ticketing)
+        alert.addAction(curation)
+        alert.addAction(openingDate)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    func orderTypeCheck(orderType: String) {
+        guard (self.orderType == orderType) else {
+            self.orderType = orderType
+            switch self.orderType {
+            case "0":
+                self.navigationItem.title = "예매율"
+            case "1":
+                self.navigationItem.title = "큐레이션"
+            case "2":
+                self.navigationItem.title = "개봉일"
+            default:
+                return
+            }
+            dataConnect()
+            return
+        }
+    }
+    func dataConnect() {
+        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type="+self.orderType) else {return}
+        
+        let session: URLSession = URLSession(configuration: .default)
+        let dataTask: URLSessionDataTask = session.dataTask(with: url) {(data: Data?, response: URLResponse?, error: Error?) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = data else {return}
+            
+            do {
+                let apiResponse: APIMoviesResponse = try JSONDecoder().decode(APIMoviesResponse.self, from: data)
+                self.movieInfos = apiResponse.movies
+                OperationQueue.main.addOperation {
+                    self.tableView.reloadData()
+                }
+                
+            } catch(let err) {
+                print(err.localizedDescription)
+            }
+            
+        }
+        dataTask.resume()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let nextViewController: DetailViewController = segue.destination as? DetailViewController else {
+            return
+        }
+        
+        guard let selectedRow = tableView.indexPathForSelectedRow?.row else {
+            return
+        }
+        
+        nextViewController.jsonData = movieInfos[selectedRow]
+    }
+    
 }
