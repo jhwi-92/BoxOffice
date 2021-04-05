@@ -9,19 +9,21 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     let cellIdentifier: String = "movieCell"
     var movieInfos: [MovieInfo] = []
-    lazy var activityIndicator: UIActivityIndicatorView = { // Create an indicator.
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        activityIndicator.center = self.view.center // Also show the indicator even when the animation is stopped.
-        activityIndicator.hidesWhenStopped = false
-        
-        activityIndicator.style = UIActivityIndicatorView.Style.white // Start animation.
-        activityIndicator.startAnimating()
-        return activityIndicator
-    }()
+    
+//    lazy var activityIndicator: UIActivityIndicatorView = { // Create an indicator.
+//        let activityIndicator = UIActivityIndicatorView()
+//        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+//        activityIndicator.center = self.view.center // Also show the indicator even when the animation is stopped.
+//        activityIndicator.hidesWhenStopped = false
+//
+//        activityIndicator.style = UIActivityIndicatorView.Style.white // Start animation.
+//        activityIndicator.startAnimating()
+//        return activityIndicator
+//    }()
 
      
     
@@ -29,11 +31,12 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     //뷰가 로드되었을 때
     override func viewDidLoad() {
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
         super.viewDidLoad()
         //indicator 뷰에 추가
-        self.view.addSubview(self.activityIndicator)
-
-        
+        //self.view.addSubview(self.activityIndicator)
+        //indicator 뷰 앞으로 배치
+        self.view.bringSubviewToFront(self.indicatorView)
         guard Setting.shared.orderType != nil else {
             Setting.shared.orderType = "0"
             return
@@ -165,9 +168,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     func dataConnect() {
-        self.activityIndicator.startAnimating()
-        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
-
+        
+        //indicator 시작
+        self.indicatorView.startAnimating()
         guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type="+Setting.shared.orderType!) else {return}
         
         let session: URLSession = URLSession(configuration: .default)
@@ -185,7 +188,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.movieInfos = apiResponse.movies
                 OperationQueue.main.addOperation {
                     self.tableView.reloadData()
-                    self.activityIndicator.stopAnimating()
+                    //self.indicatorView.stopAnimating()
+                    //self.indicatorView.hidesWhenStopped = false
+                    self.indicatorView.isHidden = true
                 }
                 
             } catch(let err) {

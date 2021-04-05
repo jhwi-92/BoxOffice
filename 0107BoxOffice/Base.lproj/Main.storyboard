@@ -204,6 +204,10 @@
                                     <outlet property="delegate" destination="1vO-cZ-kx2" id="p5e-MX-bRc"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="YIQ-Od-w8f">
+                                <rect key="frame" x="0.0" y="311" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6t1-Eu-9DO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -223,6 +227,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="indicatorView" destination="YIQ-Od-w8f" id="zRv-WW-aEQ"/>
                         <outlet property="tableView" destination="uGR-4p-1Qb" id="o37-Nq-WGn"/>
                     </connections>
                 </viewController>
@@ -971,7 +976,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Ptc-JX-w8W"/>
+        <segue reference="1en-yX-Mt4"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ic_collection" width="25" height="25"/>

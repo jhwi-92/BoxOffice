@@ -4,8 +4,9 @@
 //
 //  Created by jh on 2021/03/31.
 //
-
+//싱글톤(데이터를 저장해두기 위해서 사용)
 import Foundation
+
 
 class WriteInfo {
     

@@ -89,29 +89,17 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print("commentRequest")
         //
         guard WriteInfo.shared.writer != nil else {
-            print("aa")
-            Util.showAlert(viewController: WriteViewController(), title: "알림",
-                               msg: "작성자를 입력해주세요",
-                               buttonTitle: "확인") { (UIAlertAction) in
-                print("1")
-            }
-            //Util.showAlert(<#T##self: Util##Util#>)
-//            Util.showAlert(viewController: ViewController, title: "알림", msg: "작성자를 입력해주세요", buttonTitle: "확인", handler: nil)
             
-//            let alert = UIAlertController(title: "알림", message: "작성자를 입력해주세요", preferredStyle: .alert)
-//            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-//            }
-//            alert.addAction(okAction)
-//            present(alert, animated: false, completion: nil)
+            Util.showAlert(title: "알림",
+                               msg: "작성자를 입력해주세요",
+                               buttonTitle: "확인") { (UIAlertAction) in }
             return
         }
         guard WriteInfo.shared.contents != nil else {
             
-            let alert = UIAlertController(title: "알림", message: "내용을 입력해주세요", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
-            }
-            alert.addAction(okAction)
-            present(alert, animated: false, completion: nil)
+            Util.showAlert(title: "알림",
+                               msg: "작성자를 입력해주세요",
+                               buttonTitle: "확인") { (UIAlertAction) in }
             return
         }
         //let paramText = ""
