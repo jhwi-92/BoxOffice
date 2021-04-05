@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E92C725B2616E584002FB5BF /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92C725A2616E584002FB5BF /* CustomCollectionViewCell.swift */; };
+		E92C725E26171C53002FB5BF /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92C725D26171C53002FB5BF /* Util.swift */; };
 		E964620B25C93898003EB65E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E964620A25C93898003EB65E /* DetailViewController.swift */; };
 		E964620E25CA7A09003EB65E /* CustomDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E964620D25CA7A09003EB65E /* CustomDetailTableViewCell.swift */; };
 		E964621625DA669F003EB65E /* CustomActorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E964621525DA669F003EB65E /* CustomActorTableViewCell.swift */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E92C725A2616E584002FB5BF /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		E92C725D26171C53002FB5BF /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		E964620A25C93898003EB65E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		E964620D25CA7A09003EB65E /* CustomDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDetailTableViewCell.swift; sourceTree = "<group>"; };
 		E964621525DA669F003EB65E /* CustomActorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActorTableViewCell.swift; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 				E97831A625E4D55200228399 /* CustomWriteDetailTableViewCell.swift */,
 				E9FDDBD725E4D614005ED362 /* WriteViewController.swift */,
 				E9C8F97626144DDB00061857 /* writeInfo.swift */,
+				E92C725A2616E584002FB5BF /* CustomCollectionViewCell.swift */,
+				E92C725D26171C53002FB5BF /* Util.swift */,
 			);
 			path = 0107BoxOffice;
 			sourceTree = "<group>";
@@ -177,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E964621625DA669F003EB65E /* CustomActorTableViewCell.swift in Sources */,
+				E92C725E26171C53002FB5BF /* Util.swift in Sources */,
 				E9C8F97726144DDB00061857 /* writeInfo.swift in Sources */,
 				E97831A725E4D55200228399 /* CustomWriteDetailTableViewCell.swift in Sources */,
 				E9EEAE5C25A732D600716478 /* ViewController.swift in Sources */,
@@ -184,6 +191,7 @@
 				E9EEAE5825A732D600716478 /* AppDelegate.swift in Sources */,
 				E9EEAE5A25A732D600716478 /* SceneDelegate.swift in Sources */,
 				E9DAB65925B5D0390079D225 /* CustomTableViewCell.swift in Sources */,
+				E92C725B2616E584002FB5BF /* CustomCollectionViewCell.swift in Sources */,
 				E9C4F3BA25AC7D60008EC6B3 /* Model.swift in Sources */,
 				E9C4F3B425AC7B9F008EC6B3 /* TableViewController.swift in Sources */,
 				E9C4F3B725AC7BAC008EC6B3 /* CollectionViewController.swift in Sources */,

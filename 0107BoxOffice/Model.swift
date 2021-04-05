@@ -44,6 +44,11 @@ struct MovieInfo: Codable {
         var full: String {
             return "평점 : " + String(self.userRating) + " 예매순위 : " + String(self.reservationGrade) + " 예매율 : " + String(self.reservationRate)
         }
+        
+        var gradeRatingRate: String {
+            return "\(self.reservationGrade)위(\(self.userRating)) / \(self.reservationRate)%"
+        }
+            
         var ageImageName: String {
             switch grade {
             case 12, 15, 19:

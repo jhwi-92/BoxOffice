@@ -12,20 +12,51 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var tableView: UITableView!
     let cellIdentifier: String = "movieCell"
     var movieInfos: [MovieInfo] = []
-    var orderType: String = "0"
+    lazy var activityIndicator: UIActivityIndicatorView = { // Create an indicator.
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        activityIndicator.center = self.view.center // Also show the indicator even when the animation is stopped.
+        activityIndicator.hidesWhenStopped = false
+        
+        activityIndicator.style = UIActivityIndicatorView.Style.white // Start animation.
+        activityIndicator.startAnimating()
+        return activityIndicator
+    }()
+
+     
     
 //    @IBOutlet weak var stackView: UIStackView!
     
     //뷰가 로드되었을 때
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "예매율"
+        //indicator 뷰에 추가
+        self.view.addSubview(self.activityIndicator)
+
+        
+        guard Setting.shared.orderType != nil else {
+            Setting.shared.orderType = "0"
+            return
+        }
         // Do any additional setup after loading the view.
+        
+        
+        //Setting.shared.orderType = "0"
     }
     //뷰가 나타났을 떄.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
+        switch Setting.shared.orderType {
+        case "0":
+            self.navigationItem.title = "예매율"
+        case "1":
+            self.navigationItem.title = "큐레이션"
+        case "2":
+            self.navigationItem.title = "개봉일"
+        default:
+            return
+        }
         //api호출
         dataConnect()
     }
@@ -117,9 +148,9 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.present(alert, animated: true, completion: nil)
     }
     func orderTypeCheck(orderType: String) {
-        guard (self.orderType == orderType) else {
-            self.orderType = orderType
-            switch self.orderType {
+        guard (Setting.shared.orderType == orderType) else {
+            Setting.shared.orderType = orderType
+            switch Setting.shared.orderType {
             case "0":
                 self.navigationItem.title = "예매율"
             case "1":
@@ -134,7 +165,10 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     func dataConnect() {
-        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type="+self.orderType) else {return}
+        self.activityIndicator.startAnimating()
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
+        guard let url: URL = URL(string: "https://connect-boxoffice.run.goorm.io/movies?order_type="+Setting.shared.orderType!) else {return}
         
         let session: URLSession = URLSession(configuration: .default)
         let dataTask: URLSessionDataTask = session.dataTask(with: url) {(data: Data?, response: URLResponse?, error: Error?) in
@@ -151,6 +185,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.movieInfos = apiResponse.movies
                 OperationQueue.main.addOperation {
                     self.tableView.reloadData()
+                    self.activityIndicator.stopAnimating()
                 }
                 
             } catch(let err) {
@@ -160,6 +195,8 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         dataTask.resume()
     }
+    
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let nextViewController: DetailViewController = segue.destination as? DetailViewController else {

@@ -28,6 +28,9 @@ class CustomWriteDetailTableViewCell: UITableViewCell, UITextFieldDelegate {
         super.setSelected(selected, animated: animated)
         name.delegate = self
         contents.delegate = self
+        if WriteInfo.shared.writer != nil {
+            name.text = WriteInfo.shared.writer!
+        }
 
         // Configure the view for the selected state
     }

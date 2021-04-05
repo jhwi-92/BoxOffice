@@ -215,6 +215,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissWriteNotification(_:)), name: DidDismissWriteViewController, object: nil)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -273,6 +275,16 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         dataTask.resume()
     }
+    
+    @objc func didDismissWriteNotification(_ noti: Notification) {
+        print("11")
+        dataConnect(getURL: "https://connect-boxoffice.run.goorm.io/comments?movie_id=", getType:  "comment")
+          
+//            OperationQueue.main.addOperation { // DispatchQueue도 가능.
+//                self.tableView.reloadData()
+//            }
+
+        }
     
     func CustomDecimal(value: Int) -> String{
             let numberFormatter = NumberFormatter()

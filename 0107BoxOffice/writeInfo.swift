@@ -19,3 +19,14 @@ class WriteInfo {
     var contents: String?
     
 }
+
+class Setting {
+    
+    static let shared: Setting = Setting()
+    
+    private init() {}
+    
+    var orderType: String?
+    
+    
+}

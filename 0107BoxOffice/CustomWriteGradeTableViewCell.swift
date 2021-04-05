@@ -42,6 +42,7 @@ class CustomWriteGradeTableViewCell: UITableViewCell {
         fiveImage.image = UIImage(named: "ic_star_large_full")
         grade.text = "10"
         sliderGrade.value = 10
+        
         // Configure the view for the selected state
     }
     

@@ -7,13 +7,20 @@
 
 import UIKit
 
+let DidDismissWriteViewController: Notification.Name = Notification.Name("DidDismissWriteViewController")
+
+
 class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
     //var commentRequestData: commentRequest?
     var jsonData: MovieDetail?
+    //let ViewController = WriteViewController()
+    //let Util: Util
     
+    //var Util: Util = Util()
+
     
 
     
@@ -32,25 +39,14 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
             guard let cell: CustomWriteGradeTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "writeGradeCell", for: indexPath) as? CustomWriteGradeTableViewCell else {return CustomWriteGradeTableViewCell()}
             cell.movieTitle.text = self.jsonData!.title
             cell.movieAge.image = UIImage(named: self.jsonData!.ageImageName)
-//            cell.grade.text = "10"
-//            cell.oneImage.image = UIImage(named: "ic_star_label_full")
-//            cell.twoImage.image = UIImage(named: "ic_star_label_full")
-//            cell.threeImage.image = UIImage(named: "ic_star_label_full")
-//            cell.fourImage.image = UIImage(named: "ic_star_label_full")
-//            cell.fiveImage.image = UIImage(named: "ic_star_label_full")
-            //controller에서 뷰를 관리하기 위해 delegate사용
             //cell배열에 데이터를 담기 위해 delegate사용
             cell.delegate = self
-            
             
             return cell
         } else {
             guard let cell: CustomWriteDetailTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "writeDetailCell", for: indexPath) as? CustomWriteDetailTableViewCell else {return CustomWriteDetailTableViewCell()}
-            //cell.delegate = self
             return cell
         }
-        
-        //return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -66,24 +62,23 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        //super.viewDidLoad()
         
-        
-        
-
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        //super.viewWillAppear(animated)
         
         
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         WriteInfo.shared.movieId = jsonData!.id
         WriteInfo.shared.rating = 10
+        
     }
     
     @IBAction func cancelButton(_ sender: Any) {
@@ -92,6 +87,33 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func commitButton(_ sender: Any) {
         //textFieldText(nameText: String, contentsText: String)
         print("commentRequest")
+        //
+        guard WriteInfo.shared.writer != nil else {
+            print("aa")
+            Util.showAlert(viewController: WriteViewController(), title: "알림",
+                               msg: "작성자를 입력해주세요",
+                               buttonTitle: "확인") { (UIAlertAction) in
+                print("1")
+            }
+            //Util.showAlert(<#T##self: Util##Util#>)
+//            Util.showAlert(viewController: ViewController, title: "알림", msg: "작성자를 입력해주세요", buttonTitle: "확인", handler: nil)
+            
+//            let alert = UIAlertController(title: "알림", message: "작성자를 입력해주세요", preferredStyle: .alert)
+//            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+//            }
+//            alert.addAction(okAction)
+//            present(alert, animated: false, completion: nil)
+            return
+        }
+        guard WriteInfo.shared.contents != nil else {
+            
+            let alert = UIAlertController(title: "알림", message: "내용을 입력해주세요", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .default) { (action) in
+            }
+            alert.addAction(okAction)
+            present(alert, animated: false, completion: nil)
+            return
+        }
         //let paramText = ""
         dataConnect(getURL: "https://connect-boxoffice.run.goorm.io/comment")
         
@@ -114,35 +136,15 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //데이터 변환
         //WriteInfo
         let paramText = "{\"writer\":\"\(WriteInfo.shared.writer!)\",\"contents\":\"\(WriteInfo.shared.contents!)\",\"movie_id\":\"\(WriteInfo.shared.movieId!)\",\"rating\":\(WriteInfo.shared.rating!)}"
-        
-//        let paramJson = [{"writer": WriteInfo.shared.writer!,"contents": WriteInfo.shared.contents!,"movie_id": WriteInfo.shared.movieId!,"rating": WriteInfo.shared.rating!}]
-        
-        print("paramText")
-        print(paramText)
 
-//        print("paramText")
-//        print(paramText)
         let paramData = paramText.data(using: .utf8)
-        //let json = JSONSerialization.jsonObject(with: paramData!, options: [])
-        
-        
-        
-        
+
         // URL 객체 정의
         guard let url: URL = URL(string: getURL) else {return}
-        print("url")
-        print(url)
+
         // URL Request 객체 정의
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        print("paramData")
-        print(paramData!)
-//        let json = {"writer": WriteInfo.shared.writer!, "contents": WriteInfo.shared.contents!, "movie_id": WriteInfo.shared.movieId!, "rating": WriteInfo.shared.rating!}
-//        let data : NSData = NSKeyedArchiver.archivedData(withRootObject: json) as NSData
-//
-//
-//        JSONSerialization.isValidJSONObject(json)
-        //request.httpBody = try JSONSerialization.data(withJSONObject: body, options: JSON
         request.httpBody = paramData!
         
         // HTTP 메시지 헤더
@@ -164,61 +166,31 @@ class WriteViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let outputStr = String(data: data!, encoding: String.Encoding.utf8)
                 print("data:")
                 print("result: \(outputStr!)")
-                
-//                let apiResponse: MovieDetail = try JSONDecoder().decode(MovieDetail.self, from: data)
-//                self.detailMovies = apiResponse
+                if outputStr != nil {
+                    self.success()
+                }
             }
-          
         }
         // POST 전송
         task.resume()
         
         
-       // let session: URLSession = URLSession(configuration: .default)
-//        let dataTask: URLSessionDataTask = session.dataTask(with: url) {(data: Data?, response: URLResponse?, error: Error?) in
-//
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            }
-//
-//            guard let data = data else {return}
-//
-//            do {
-//                if getType == "detail" {
-//                    let apiResponse: MovieDetail = try JSONDecoder().decode(MovieDetail.self, from: data)
-//                    self.detailMovies = apiResponse
-//                    print("ttttttttttttt")
-//                    print(self.detailMovies!)
-//                } else if getType == "comment" {
-//                    let apiResponse: APICommentMoviesResponse = try JSONDecoder().decode(APICommentMoviesResponse.self, from: data)
-//                    self.comments = apiResponse.comments
-//                    print("ttttttttttttt")
-//                    print(self.comments)
-//                }
-//
-//                OperationQueue.main.addOperation {
-//                    self.tableView.reloadData()
-//                }
-//
-//            } catch(let err) {
-//                print(err.localizedDescription)
-//            }
-//
-//        }
-//        dataTask.resume()
+      
+    }
+    
+    func success () {
+        NotificationCenter.default.post(name: DidDismissWriteViewController, object: nil, userInfo: nil)
+        //contents 내용 초기화
+        WriteInfo.shared.contents = nil
+        self.dismiss(animated: true, completion: nil)
+        
     }
 
 }
 
 
 extension WriteViewController: CustomCellDelegate {
-//    func textFieldText(nameText: String, contentsText: String) {
-//        WriteInfo.shared.contents = contentsText
-//        WriteInfo.shared.writer = nameText
-//        //sself.dismiss(animated: true, completion: nil)
-//        print("commit")
-//    }
+
     
   func customCell(_ customCell: CustomWriteGradeTableViewCell, sliderValueChanged value: Int) {
     
